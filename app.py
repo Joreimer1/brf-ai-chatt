@@ -1,10 +1,9 @@
 import os
+import asyncio
 import streamlit as st
 import chromadb
 from chromadb.utils import embedding_functions
 from google.antigravity import Agent, LocalAgentConfig
-
-
 
 st.set_page_config(page_title="BRF AI-Test", layout="centered")
 st.title("🤖 Styrelseassistenten: Prototyp")
@@ -41,7 +40,6 @@ except Exception as e:
 def sök_i_dokument(fråga_text):
     try:
         resultat = samling.query(query_texts=[fråga_text], n_results=3)
-        # ChromaDB returnerar en nästlad lista, så vi plockar ut det första resultatet [0] säkert
         if resultat and 'documents' in resultat and resultat['documents'] and len(resultat['documents']) > 0:
             textblock = resultat['documents'][0]
             if textblock:
@@ -68,7 +66,6 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     # Gör sökningen i era PDF-filer
     relevant_fakta = sök_i_dokument(fråga)
     
-    
     # Skapa konfigurationen för agenten enligt Google Antigravity SDK-standard
     konfiguration = LocalAgentConfig(
         system_instructions=(
@@ -78,19 +75,19 @@ if fråga := st.chat_input("Skriv din fråga här..."):
             f"'Jag hittar ingen information om detta i föreningens gällande dokument. Svaret måste stämmas av med styrelsen.'"
         )
     )
-
+    
     # Starta agenten med konfigurationen
     agent = Agent(config=konfiguration)
 
-    
-     import asyncio
-
     # Funktion för att köra agenten asynkront enligt SDK-specifikationen
     async def kör_agent():
-        # Agenten körs som en async context manager
         async with agent:
             return await agent.chat(fråga)
     
     # Kör den asynkrona loopen inuti Streamlit
     ai_svar = asyncio.run(kör_agent())
 
+    # Visa svaret för användaren
+    with st.chat_message("assistant"):
+        st.markdown(ai_svar)
+    st.session_state.messages.append({"role": "assistant", "content": ai_svar})
