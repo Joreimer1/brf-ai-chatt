@@ -85,9 +85,11 @@ if fråga := st.chat_input("Skriv din fråga här..."):
             return await agent.chat(fråga)
     
     # Kör den asynkrona loopen inuti Streamlit
-    ai_svar = asyncio.run(kör_agent())
+    ai_svar_objekt = asyncio.run(kör_agent())
+    ai_text = ai_svar_objekt.text  # Hämtar ut den rena textsträngen från Google-objektet
 
     # Visa svaret för användaren
     with st.chat_message("assistant"):
-        st.markdown(ai_svar)
-    st.session_state.messages.append({"role": "assistant", "content": ai_svar})
+        st.markdown(ai_text)
+    st.session_state.messages.append({"role": "assistant", "content": ai_text})
+
