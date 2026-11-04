@@ -69,7 +69,6 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     
     # Skapa agenten via Google Antigravity SDK
     agent = Agent(
-        model="gemini-2.5-flash", 
         system_instructions=(
             f"Du är en BRF-assistent. Svara artigt och sakligt på svenska. "
             f"Basera ditt svar ENBART på denna fakta från föreningens dokument:\n\n{relevant_fakta}\n\n"
