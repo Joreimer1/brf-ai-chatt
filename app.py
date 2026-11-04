@@ -2,7 +2,8 @@ import os
 import streamlit as st
 import chromadb
 from chromadb.utils import embedding_functions
-from google.get_antigravity import Agent  # För att säkerställa rätt SDK-import i molnmiljön
+from google.antigravity import Agent  # Rättad import utan extra .get
+
 
 st.set_page_config(page_title="BRF AI-Test", layout="centered")
 st.title("🤖 Styrelseassistenten: Prototyp")
