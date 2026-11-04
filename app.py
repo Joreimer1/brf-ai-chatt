@@ -84,12 +84,16 @@ if fråga := st.chat_input("Skriv din fråga här..."):
         async with agent:
             return await agent.chat(fråga)
     
+       # Funktion för att köra agenten och packa upp texten asynkront enligt SDK-specifikationen
+    async def hämta_svar():
+        async with agent:
+            svar_objekt = await agent.chat(fråga)
+            return await svar_objekt.text()  # Här väntar vi in den rena texten säkert!
+    
     # Kör den asynkrona loopen inuti Streamlit
-    ai_svar_objekt = asyncio.run(kör_agent())
-    ai_text = ai_svar_objekt.text()  # Hämtar ut den rena textsträngen från Google-objektet
+    ai_text = asyncio.run(hämta_svar())
 
     # Visa svaret för användaren
     with st.chat_message("assistant"):
         st.markdown(ai_text)
     st.session_state.messages.append({"role": "assistant", "content": ai_text})
-
