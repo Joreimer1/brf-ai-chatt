@@ -2,7 +2,8 @@ import os
 import streamlit as st
 import chromadb
 from chromadb.utils import embedding_functions
-from google.antigravity import Agent  # Rättad import utan extra .get
+from google.antigravity import Agent, LocalAgentConfig
+
 
 
 st.set_page_config(page_title="BRF AI-Test", layout="centered")
@@ -67,8 +68,9 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     # Gör sökningen i era PDF-filer
     relevant_fakta = sök_i_dokument(fråga)
     
-    # Skapa agenten via Google Antigravity SDK
-    agent = Agent(
+    
+    # Skapa konfigurationen för agenten enligt Google Antigravity SDK-standard
+    konfiguration = LocalAgentConfig(
         system_instructions=(
             f"Du är en BRF-assistent. Svara artigt och sakligt på svenska. "
             f"Basera ditt svar ENBART på denna fakta från föreningens dokument:\n\n{relevant_fakta}\n\n"
@@ -76,6 +78,10 @@ if fråga := st.chat_input("Skriv din fråga här..."):
             f"'Jag hittar ingen information om detta i föreningens gällande dokument. Svaret måste stämmas av med styrelsen.'"
         )
     )
+
+    # Starta agenten med konfigurationen
+    agent = Agent(config=konfiguration)
+
     
     # Generera svaret
     ai_svar = agent.run(fråga)
