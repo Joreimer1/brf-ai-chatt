@@ -1,8 +1,7 @@
 import streamlit as st
 import chromadb
 from chromadb.utils import embedding_functions
-import google_antigravity as antigravity
-from google_antigravity import Agent
+from google.antigravity import Agent  # Rättad import med punkt!
 
 
 st.set_page_config(page_title="BRF AI-Test", layout="centered")
