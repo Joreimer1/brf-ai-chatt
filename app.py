@@ -40,7 +40,7 @@ except Exception as e:
 # 2. SÄKRAD SÖKFUNKTION (RAG)
 def sök_i_dokument(fråga_text):
     try:
-        resultat = samling.query(query_texts=[fråga_text], n_results=3)
+        resultat = samling.query(query_texts=[fråga_text], n_results=6)
         if resultat and 'documents' in resultat and resultat['documents'] and len(resultat['documents']) > 0:
             textblock = resultat['documents'][0]
             if textblock:
@@ -68,14 +68,18 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     relevant_fakta = sök_i_dokument(fråga)
     
     # Skapa konfigurationen för agenten enligt Google Antigravity SDK-standard
-    konfiguration = LocalAgentConfig(
-        system_instructions=(
-            f"Du är en BRF-assistent. Svara artigt och sakligt på svenska. "
-            f"Basera ditt svar ENBART på denna fakta från föreningens dokument:\n\n{relevant_fakta}\n\n"
-            f"Om informationen inte finns i texten ovan, svara ordagrant: "
-            f"'Jag hittar ingen information om detta i föreningens gällande dokument. Svaret måste stämmas av med styrelsen.'"
-        )
+konfiguration = LocalAgentConfig(
+    system_instructions=(
+        "Du är en hjälpsam och saklig assistent för bostadsrättsföreningen. Svara alltid på svenska.\n\n"
+        "REGLER FÖR ATT SVARA:\n"
+        "1. Basera svaret på informationen under 'DOKUMENTFAKTA'.\n"
+        "2. Om användaren beskriver ett problem eller fel (t.ex. att en hiss, port eller tvättstuga är trasig, eller en vattenläcka), tolka det som en begäran om hur man felanmäler och vem man ska kontakta.\n"
+        "3. Om dokumentfakta innehåller generella instruktioner för föreningen (t.ex. hissjour för alla hus), gäller dessa även om användaren anger ett specifikt gatunummer inom föreningen.\n"
+        "4. Dra inte förhastade slutsatser om fakta helt saknas. Om det varken finns instruktioner, kontaktuppgifter eller svar i underlaget, svara:\n"
+        "'Jag hittar ingen information om detta i föreningens gällande dokument. Svaret måste stämmas av med styrelsen.'\n\n"
+        f"DOKUMENTFAKTA:\n{relevant_fakta}"
     )
+)
     
     # Starta agenten med konfigurationen
     agent = Agent(config=konfiguration)
