@@ -1,3 +1,4 @@
 streamlit
 chromadb
-google-antigravity
+google_antigravity
+google-genai
