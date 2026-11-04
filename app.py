@@ -15,10 +15,12 @@ if not api_key:
     st.error("API-nyckel saknas! Lägg till GEMINI_API_KEY i Advanced Settings -> Secrets.")
     st.stop()
 
-# Ny funktion: Vi ber Google räkna ut sökvektorerna istället för lokala datorn
-google_ef = embedding_functions.GoogleGeminiEmbeddingFunction(
-    api_key=api_key
-)
+# VIKTIGT STEG: Vi sätter nyckeln i systemets minne så ChromaDB hittar den automatiskt!
+import os
+os.environ["GEMINI_API_KEY"] = api_key
+
+# Nu startar vi funktionen UTAN api_key inuti parentesen
+google_ef = embedding_functions.GoogleGeminiEmbeddingFunction()
 
 @st.cache_resource
 def initiera_databas():
