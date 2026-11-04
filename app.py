@@ -1,7 +1,9 @@
 import streamlit as st
 import chromadb
 from chromadb.utils import embedding_functions
+import google_antigravity as antigravity
 from google_antigravity import Agent
+
 
 st.set_page_config(page_title="BRF AI-Test", layout="centered")
 st.title("🤖 Styrelseassistenten: Prototyp")
