@@ -20,7 +20,11 @@ import os
 os.environ["GEMINI_API_KEY"] = api_key
 
 # Nu startar vi funktionen UTAN api_key inuti parentesen
-google_ef = embedding_functions.GoogleGeminiEmbeddingFunction()
+# Nu startar vi funktionen och låser den till exakt rätt modell
+google_ef = embedding_functions.GoogleGeminiEmbeddingFunction(
+    model_name="models/text-embedding-004"
+)
+
 
 @st.cache_resource
 def initiera_databas():
