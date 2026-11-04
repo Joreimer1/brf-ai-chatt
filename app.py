@@ -86,7 +86,7 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     
     # Kör den asynkrona loopen inuti Streamlit
     ai_svar_objekt = asyncio.run(kör_agent())
-    ai_text = ai_svar_objekt.text  # Hämtar ut den rena textsträngen från Google-objektet
+    ai_text = ai_svar_objekt.text()  # Hämtar ut den rena textsträngen från Google-objektet
 
     # Visa svaret för användaren
     with st.chat_message("assistant"):
