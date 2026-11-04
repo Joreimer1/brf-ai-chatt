@@ -83,10 +83,14 @@ if fråga := st.chat_input("Skriv din fråga här..."):
     agent = Agent(config=konfiguration)
 
     
-    # Generera svaret
-    ai_svar = agent.run(fråga)
+     import asyncio
 
-    # Visa svaret för användaren
-    with st.chat_message("assistant"):
-        st.markdown(ai_svar)
-    st.session_state.messages.append({"role": "assistant", "content": ai_svar})
+    # Funktion för att köra agenten asynkront enligt SDK-specifikationen
+    async def kör_agent():
+        # Agenten körs som en async context manager
+        async with agent:
+            return await agent.chat(fråga)
+    
+    # Kör den asynkrona loopen inuti Streamlit
+    ai_svar = asyncio.run(kör_agent())
+
