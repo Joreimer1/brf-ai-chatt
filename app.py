@@ -19,10 +19,11 @@ if not api_key:
 # Sätt nyckeln i systemmiljön så att ChromaDB hittar den automatiskt
 os.environ["GEMINI_API_KEY"] = api_key
 
-# Lås sökmodellen till exakt samma som användes vid skapandet av databasen
+# Synka med samma korrekta modellnamn i molnet
 google_ef = embedding_functions.GoogleGeminiEmbeddingFunction(
-    model_name="models/text-embedding-004"
+    model_name="gemini-embedding-001"
 )
+
 
 @st.cache_resource
 def initiera_databas():
